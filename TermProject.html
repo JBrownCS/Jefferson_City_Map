@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="CSC370 Web Programming">
+        <meta name="keywords" content="HTML, HTML5, CSS CSS3, Javascript and Web">
+        <meta name="author" content= "Joshua Brown (jsbrown1061@cn.edu)">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Jefferson City Map</title>
+        
+         <!--CSS File for map styling-->
+        <link rel="stylesheet" href="MapStyle.css">
+
+    <script>
+        function initMap(){
+            //Map Constructor
+            map = new google.maps.Map(document.getElementById("map"), {
+                //Center the map at Carson-Newman University
+                center: {lat: 36.12237931273731, lng: -83.4903472738857},
+                zoom: 16,
+                //Set Map Type ID to satellite for satellite imaging
+                mapTypeId: "satellite",
+            });
+            map.setTilt(45);
+        /*
+            -Create an array of the possible markers on the map
+            -Each entry will be an array of information for creating the markers and info window
+                -Format: [Name, latitude, longitude, image url, info window content]
+        */
+        const PointsOfInterest = [
+            //Add a marker for Carson-Newman University
+            ["College", 36.12255263896764, -83.49036873155642, "/Project/images/cn_logo.jpg", "<p><b>Carson-Newman University</b></p> <a href='https://www.cn.edu'>OfficialWebsite</a>"],
+            //Add a marker for the CN FootBall Stadium
+            ["CN Football Stadium", 36.121869198609794, -83.48555375058017, "/Project/images/football.jpg", "<p><b>CN Football Stadium</b></p> <a href='https://www.cneagles.com/sports/m-footbl/index'>See the Team Site Here</a>"],
+            //Add a marker for the CN Baseball Field
+            ["CN Baseball Field", 36.1220528, -83.4879442, "/Project/images/baseball_img.png", "<p><b>CN Baseball Field</b></p> <a href='https://www.cneagles.com/sports/m-basebl/index'>See the Team Site Here</a>"],
+            //Add a marker for the CN Soccer Field
+            ["CN Soccer Field", 36.12055289211891, -83.48817733015845, "/Project/images/soccer_img.png", "<p><b>CN Soccer Field</b></p> <a href='https://www.cneagles.com/sports/m-soccer/index'>See the Team Site Here</a>"],
+            //Add a marker for Chick-Fil-A
+            ["Chick-Fil-A", 36.12149638727004, -83.48848188924664, "/Project/images/chick_fil_a_logo.jpg", "<p><b>Chick-Fil-A</b></p> <a href='https://www.chick-fil-a.com/order'>Order Here</a>"],
+            //Add a marker for McDonald's
+            ["McDonald's", 36.11459254886309, -83.49350208076378, "/Project/images/mcdonalds_logo.jpg", "<p><b>McDonald's</b></p> <a href='https://www.doordash.com/business/mcdonald-s-5579/?utm_campaign=CX_US_EP_EP_EP_PAR_CUSXXX__+McDonald%27s_Mcdwebsite&utm_medium=Enterprise&utm_source=Enterprise'>Order Here</a>"],
+            //Add a marker for Taco Bell
+            ["Taco Bell",36.116454728819875, -83.48938517309291, "/Project/images/taco_bell_logo.jpg", "<p><b>Taco Bell</b></p> <a href='https://www.tacobell.com/food'>Order Here</a>"],
+            //Add a marker for Burger King
+            ["Burger King", 36.11656901882007, -83.48873286716895, "/Project/images/burger_king_logo.jpg", "<p><b>Burger King</b></p> <a href='https://www.bk.com/menu'>Order Here</a>"],
+            //Add a marker for Little Caesar's
+            ["Little Caesar's", 36.11400565084174, -83.49354000282787, "/Project/images/little_caesars_logo.png", "<p><b>Little Caesars</b></p> <a href='https://littlecaesars.com/en-us/order'>Order Here</a>"],
+            //Add a marker for Food City
+            ["Food City", 36.117331317169494, -83.48732354515701, "/Project/images/foodcity_logo.jpg", "<p><b>Food City</b></p> <a href='https://www.foodcity.com/'>Order Some Groceries Here</a>"],
+            //Add a marker for Big Lots 
+            ["Big Lots", 36.11915558017868, -83.48276611632164, "/Project/images/big_lots_logo.jpg", "<p><b>Big Lots</b></p> <a href='https://www.biglots.com/'>Shop Here</a>"],
+            //Add a marker for Walmart     
+            ["Walmart", 36.12890604888993, -83.46802280278337, "/Project/images/walmart_logo.jpg", "<p><b>Walmart</b></p> <a href='https://www.walmart.com/'>Shop Here</a>"],
+            //Add a marker for Mini-Golf Course
+            ["Mini Golf Course", 36.111042293795, -83.48768466049869, "/Project/images/golf_club_img.jpg", "<p><b>Mossy Creek Mini Golf</b></p> <a href='https://www.puttmc.com/priceshours.html'>Pricing and Hours Here</a>"],
+            //Add a marker for Glenmore Mansion
+            ["Glenmore Mansion", 36.128079, -83.483194, "/Project/images/glenmore_mansion.jpg", "<p><b>Glenmore Mansion</b></p> <a href='https://glenmoremansion.com/about/'>Learn About the History of this Public House Museum</a>"],
+            //Add a marker for Cherokee Dam
+            ["Cherokee Dam", 36.15652900564872, -83.51121098742418, "/Project/images/cherokee_dam_img.jpg", "<p><b>Cherokee Dam</b></p> <a href='http://www.cherokee-lake.org/cherokee-dam-campground/'>Learn about the Campground Here</a>"]
+        ];
+
+        for(var index = 0; index < PointsOfInterest.length; index++){
+            var currentMarker = PointsOfInterest[index];
+
+            //Add a marker
+            const marker = new google.maps.Marker({
+                //Latitude and Longitude
+                position: { lat: currentMarker[1], lng: currentMarker[2] },
+                //Map I am using
+                map,
+                //String Title
+                title: currentMarker[0],
+                //Image/SVG file for marker icon
+                icon: currentMarker[3]
+            });
+
+            //Create the info window with the given content string in PointsOfInterst[i][4]
+            const infowindow = new google.maps.InfoWindow({
+                content: currentMarker[4],
+            });
+            //Add a listener so it knows when the user clicks the marker
+            marker.addListener("click", () => {
+                infowindow.open(map, marker);
+            });
+          }
+        }   
+    </script>
+    <!--Script to load in the map style-->
+    <!--Popup Window Text style so it can more directly load into the map-->
+    <style>
+        /*Map style */
+        #map{
+            height: 450px;
+        }
+
+        .gm-style-iw-d{
+            color: black;
+        }
+
+        /* Style for the bottom navigation to learn more about Jefferson City */
+        div.Navigation{
+            overflow: hidden;
+            background-color:grey;
+        }
+
+        /* Style for the bottom navigation links (normal browser window) */
+        div.Navigation a{
+            float: left;
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 25px 25px;
+            text-decoration: none;
+        }
+
+        /* Style for when the mouse hovers over the navigation links */
+        div.Navigation a:hover{
+            background-color: orange;
+            color:black;
+        }
+
+        /* Style for when the screen decreases in size */
+        @media screen and (max-width: 600px) {
+            div.Navigation a{
+                float: none;
+                width: 100%;
+        }
+    }
+    </style>
+
+    </head>
+    <body>
+        <h1>Jefferson City Map</h1>
+        <h3 style="text-align: center;">The Image Markers on the Map Signify Cool Places Carson-Newman Students Should Visit</h3>
+        <!--Display the Map-->
+        <div id="map"></div>
+
+        <!--Load in the Map  (async)-->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQ43fTWbtNv87pjraKNO3LkaMU86k0DOo&map_ids=972c3a9d12db49f0&callback=initMap"></script>
+
+        <!--Navigation Links-->
+        <div class="Navigation">
+            <a href="https://jeffcitytn.com/"> Jefferson City Website</a>
+            <a href="https://www.tripadvisor.com/Attractions-g55126-Activities-Jefferson_City_Tennessee.html"> 
+                Potential Tourist Spots to Visit</a>
+            <a href="https://www.tripadvisor.com/Restaurants-g55126-Jefferson_City_Tennessee.html"> 
+                Potential Restaurant Spots to Visit</a>
+            <a href="https://www.tripadvisor.com/Flights-g55126-Jefferson_City_Tennessee-Cheap_Discount_Airfares.html"> 
+                Potential Flights to Jefferson City</a>
+            <a href="https://www.tripadvisor.com/Hotels-g55126-Jefferson_City_Tennessee-Hotels.html"> 
+                Potential Hotels in Case You Visit Jefferson City</a>
+        </div>
+        <hr>
+        <footer>
+            <p>Carson-Newman University </p>
+            <p>Joshua Brown (jsbrown1061@cn.edu)</p>
+        </footer>
+        <hr>
+    </body>
+</html>

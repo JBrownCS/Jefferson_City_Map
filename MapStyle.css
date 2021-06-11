@@ -1,0 +1,35 @@
+html{
+    /* Set box sizing so padding does not affect final size */
+    box-sizing: border-box;
+    /* Make Font Size easier to read*/
+    font-size: 100%;
+}
+
+/*Make all elements before and after inherit box sizing property*/
+*, *::before, *::after{
+    box-sizing: inherit;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color:  #3c81e9;
+    color: white;
+}
+
+/*Map style */
+#map{
+    height: 60%;
+}
+
+/*h1 Style */
+h1{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+
+/*h3 Style */
+h3{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
