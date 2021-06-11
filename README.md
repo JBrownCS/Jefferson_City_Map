@@ -1,2 +1,5 @@
 # Jefferson_City_Map
- Map of Jefferson City Using Google JavaScript API
+ This project is for potential Carson-Newman Students that want to learn more about the Jefferson City Area
+This project was done using HTML, CSS, and primarily the Google Maps JavaScript API.
+The Google Maps JavaScript API allows you to load in customizable maps to your website
+
